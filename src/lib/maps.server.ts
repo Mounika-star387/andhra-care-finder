@@ -221,3 +221,32 @@ export async function travelMatrix(origin: LatLng, destinations: LatLng[]) {
   }
   return results;
 }
+
+const AP_QUERIES = [
+  "hospitals in Visakhapatnam Andhra Pradesh",
+  "hospitals in Vijayawada Andhra Pradesh",
+  "hospitals in Guntur Andhra Pradesh",
+  "hospitals in Tirupati Andhra Pradesh",
+  "hospitals in Nellore Andhra Pradesh",
+  "hospitals in Kurnool Andhra Pradesh",
+  "hospitals in Rajahmundry Andhra Pradesh",
+  "hospitals in Kakinada Andhra Pradesh",
+];
+
+export async function andhraPradeshHospitals() {
+  const seen = new Map<string, Hospital>();
+  const batches = await Promise.all(
+    AP_QUERIES.map((q) =>
+      searchTextPlaces({ textQuery: q, pages: 1, maxResults: 20 }).catch(() => [] as Hospital[]),
+    ),
+  );
+  for (const batch of batches) for (const h of batch) seen.set(h.id, h);
+  return {
+    count: seen.size,
+    citiesScanned: AP_QUERIES.length,
+    sample: [...seen.values()]
+      .filter((h) => h.rating != null)
+      .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
+      .slice(0, 6),
+  };
+}
