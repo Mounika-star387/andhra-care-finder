@@ -1,8 +1,8 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link, ClientOnly } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ClientOnly } from "@tanstack/react-router";
 import { Suspense, lazy, useEffect, useMemo, useState } from "react";
+
 import { AlertTriangle, MapPin, Loader2, Search, Hospital as HospitalIcon } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { HospitalCard } from "@/components/HospitalCard";
